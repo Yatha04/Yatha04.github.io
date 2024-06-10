@@ -295,14 +295,32 @@
             document.cookie = name + "=" + value + ";expires=" + expires.toUTCString() + ";path=/";
         }
 
-        if(document.cookie.indexOf("username") <0 ){
-            alert('Welcome to my homepage!');
-            document.cookie ="username" + new Date().toUTCString() + "; path=/";
-
-        } else{
-                alert("Welcome back! Your laast visit was =" + document.cookie);
-                document.cookie = "username=" +  new Date().toUTCString() + "; path=/";
-        }
+        function setCookie(name, value, days) {
+          const date = new Date();
+          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+          const expires = "expires=" + date.toUTCString();
+          document.cookie = name + "=" + value + ";" + expires + ";path=/";
+      }
+      
+      function getCookie(name) {
+          const nameEQ = name + "=";
+          const ca = document.cookie.split(';');
+          for (let i = 0; i < ca.length; i++) {
+              let c = ca[i].trim();
+              if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length);
+          }
+          return null;
+      }
+      
+      // Checking and setting the "lastVisit" cookie
+      if (!getCookie("lastVisit")) {
+          alert('Welcome to my homepage!');
+          setCookie("lastVisit", new Date().toUTCString(), 365);
+      } else {
+          const lastVisit = getCookie("lastVisit");
+          alert("Welcome back! Your last visit was " + lastVisit);
+          setCookie("lastVisit", new Date().toUTCString(), 365);
+      }
     </script>
 </body>
 </html>
